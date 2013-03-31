@@ -1,0 +1,6 @@
+Colonel Mustard	yellow	32
+Reverend Green	green	100
+Mrs. White	white	100
+Professor Plum	magenta	294
+Mrs. Peacock	blue	100
+Miss Scarlet	red	528
