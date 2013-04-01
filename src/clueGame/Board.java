@@ -1,5 +1,8 @@
 package clueGame;
 
+import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -10,15 +13,19 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
 import clueGame.RoomCell.DoorDirection;
 
-public class Board {
+public class Board extends JPanel
+{
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>(); 
 	private Map<Character, String> rooms = new HashMap<Character, String>(); 
 	private Map<Integer, LinkedList<Integer>> adjMtx = new HashMap<Integer, LinkedList<Integer>>();
 	private HashSet<BoardCell> targets = new HashSet<BoardCell>();
-	private int numRows;
-	private int numColumns;
+	private static int numRows;
+	private static int numColumns;
 	private static int TOTAL_NUMB;
 	private boolean[] visited;
 	private String configFile;
@@ -39,11 +46,22 @@ public class Board {
 		TOTAL_NUMB = numRows * numColumns;
 		visited = new boolean[TOTAL_NUMB];
 		calcAdjacencies();
+
 	}
 	
 //	public HashSet<BoardCell> getTargets() {
 //		return targets;
 //	}
+	
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		for (BoardCell cell : cells)
+		{
+			cell.draw(g);
+		}
+	}
+	
 	public void loadConfigFiles() throws BadConfigFormatException {
 			loadConfigFilesLegend(legend);//change based on our files
 			loadConfigFilesFormat(configFile); //change name based on our files
@@ -266,7 +284,7 @@ public class Board {
 		this.rooms = rooms;
 	}
 
-	public int getNumRows() {
+	public static int getNumRows() {
 		return numRows;
 	}
 
@@ -274,7 +292,7 @@ public class Board {
 		this.numRows = numRows;
 	}
 
-	public int getNumColumns() {
+	public static int getNumColumns() {
 		return numColumns;
 	}
 

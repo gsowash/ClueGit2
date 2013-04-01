@@ -1,15 +1,20 @@
 package clueGame;
 
+import java.awt.Graphics;
+
 public abstract class BoardCell {
 	protected int row;
 	protected int column;
 	protected int index;
+	static final int CELLSIZE = 20;
 	
 	public BoardCell(){}
 	
 	public BoardCell(int index) {
 		this.index = index;
 	}
+	
+	abstract void draw (Graphics g);
 	
 	public int getIndex() {
 		return index;

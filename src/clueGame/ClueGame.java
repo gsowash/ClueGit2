@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.awt.BorderLayout;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,9 +12,12 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
 import clueGame.Card.CardType;
 
-public class ClueGame {
+public class ClueGame extends JFrame{
 	
 	private Board board;
 	public static final int NUMPLAYERS=6;
@@ -21,13 +25,6 @@ public class ClueGame {
 	private ArrayList<Card> seenCards = new ArrayList<Card>();
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	private Solution solution = new Solution();
-//	private String mapFile;
-//	private String legendFile;
-//	private String playersFile;
-//	private String cardFile;
-
-	
-
 	
 	public ClueGame() {		// Default constructor for test purposes only. Use 4 argument ctor below
 		board = new Board("ClueLayout.csv", "ClueLegend.txt");
@@ -37,7 +34,9 @@ public class ClueGame {
 	}
 	
 	public ClueGame(String clueMap, String clueLegend, String cluePlayers, String clueCards) {
+
 		board = new Board(clueMap, clueLegend);
+
 		try {
 			loadConfigFilesPlayers(cluePlayers);
 		}
@@ -51,6 +50,13 @@ public class ClueGame {
 			e.printStackTrace();
 		}	
 		dealCardsToPlayers();
+		
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Clue Command Interface");
+		setSize(800,800);
+		add(board,BorderLayout.CENTER);
+
 	}
 	
 	private void loadConfigFilesCards(String fileName) throws BadConfigFormatException {
@@ -267,5 +273,10 @@ public class ClueGame {
 	public void setSolution(String person, String room, String weapon) {     //testing only
 		solution = new Solution(person, room, weapon);
 	}	
+	
+	public static void main(String[] args) {
+		ClueGame gui = new ClueGame("ClueLayout.csv","ClueLegend.txt","CluePlayers.txt","ClueCards.txt");
+		gui.setVisible(true);
+	}
 	
 }
