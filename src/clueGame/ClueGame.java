@@ -1,6 +1,15 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;	//test delete later
+import javax.swing.JPopupMenu;  //test delete later
+import javax.swing.JTextArea;   //test delete later
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -39,6 +48,21 @@ public class ClueGame extends JFrame{
 	
 	public ClueGame(String clueMap, String clueLegend, String cluePlayers, String clueCards) {
 
+		 JMenuBar topMenu = new JMenuBar();
+	        JMenu fileDropDown = new JMenu("File");
+	        topMenu.add(fileDropDown);
+	        JMenuItem detectiveDropButton = new JMenuItem ("Detective Notes");
+	        fileDropDown.add(detectiveDropButton);
+	        setJMenuBar(topMenu);
+	        
+	        class detectiveAction implements ActionListener{
+				@Override
+				public void actionPerformed(ActionEvent arg0){
+					JFrame win = new DetectiveNotes();
+			        win.setVisible(true);
+				}
+	        }
+	        detectiveDropButton.addActionListener(new detectiveAction());
 		
 		board = new Board(clueMap, clueLegend);
 		
