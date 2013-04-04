@@ -107,6 +107,11 @@ public class Board extends JPanel
 		} catch (FileNotFoundException e) {
 			System.out.println("Can't open file: " + e.getMessage());
 		}
+		
+		for (BoardCell c: cells){
+			c.setTotCol(numColumns);
+		}
+		
 	}
 
 	private void loadConfigFilesLegend(String fileName) throws BadConfigFormatException {

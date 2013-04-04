@@ -7,6 +7,7 @@ public abstract class BoardCell {
 	protected int column;
 	protected int index;
 	static final int CELLSIZE = 20;
+	protected int totCol;
 	
 	public BoardCell(){}
 	
@@ -15,6 +16,13 @@ public abstract class BoardCell {
 	}
 	
 	abstract void draw (Graphics g);
+	
+	public void setTotCol(int t){
+		this.totCol = t;
+		this.row = index/t;
+		this.column = index%t;
+		
+	}
 	
 	public int getIndex() {
 		return index;
