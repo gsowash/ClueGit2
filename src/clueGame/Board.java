@@ -15,6 +15,7 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.border.EtchedBorder;
 
 import clueGame.RoomCell.DoorDirection;
 
@@ -25,12 +26,12 @@ public class Board extends JPanel
 	private Map<Integer, LinkedList<Integer>> adjMtx = new HashMap<Integer, LinkedList<Integer>>();
 	private HashSet<BoardCell> targets = new HashSet<BoardCell>();
 	private static int numRows;
-	private static int numColumns;
+	private  int numColumns;
 	private static int TOTAL_NUMB;
 	private boolean[] visited;
 	private String configFile;
 	private String legend;
-	
+	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	
 	public Board(String configFile, String legend) {
 		super();
@@ -46,6 +47,7 @@ public class Board extends JPanel
 		TOTAL_NUMB = numRows * numColumns;
 		visited = new boolean[TOTAL_NUMB];
 		calcAdjacencies();
+		setBorder(new EtchedBorder());
 
 	}
 	
@@ -55,11 +57,19 @@ public class Board extends JPanel
 	
 	public void paintComponent(Graphics g)
 	{
+		//System.out.println(numColumns);
 		super.paintComponent(g);
 		for (BoardCell cell : cells)
 		{
 			cell.draw(g);
 		}
+		//g.drawLine(numColumns, y1, x2, y2);
+		
+		for(Player value: players.values()){
+			value.setTotCol(numColumns);
+			value.draw(g);
+		}
+		
 	}
 	
 	public void loadConfigFiles() throws BadConfigFormatException {
@@ -103,11 +113,12 @@ public class Board extends JPanel
 			}
 			in.close();
 			numColumns = columns;
+			
 			numRows = rows;
 		} catch (FileNotFoundException e) {
 			System.out.println("Can't open file: " + e.getMessage());
 		}
-		
+		//System.out.println(numColumns);
 		for (BoardCell c: cells){
 			c.setTotCol(numColumns);
 		}
@@ -297,8 +308,10 @@ public class Board extends JPanel
 		this.numRows = numRows;
 	}
 
-	public static int getNumColumns() {
+	public int getNumColumns() {
+		
 		return numColumns;
+		
 	}
 
 	public void setNumColumns(int numColumns) {
@@ -319,5 +332,13 @@ public class Board extends JPanel
 		cell =(BoardCell)cells.get(index);
 		return cell;
 	}
+
+	
+
+	public void setPlayers(HashMap<Integer, Player> players) {
+		this.players = players;
+	}
+	
+	
 
 }

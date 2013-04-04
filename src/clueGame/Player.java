@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +17,10 @@ public class Player {
 	private ArrayList<Card> myCards;
 	protected ArrayList<Card> seenCards = new ArrayList<Card>();
 	protected ArrayList<Card> deckOfCards = new ArrayList<Card>();
+	protected int totCol;
+	protected int column;
+	protected int row;
+	
 		
 	public Player() {
 		myCards = new ArrayList<Card>();
@@ -52,6 +57,22 @@ public class Player {
 			color = null; // Not defined } 
 		}
 
+	}
+	
+	public void draw(Graphics g){
+		g.setColor(color);
+		
+		
+		g.fillOval(BoardCell.CELLSIZE*column,BoardCell.CELLSIZE*row, BoardCell.CELLSIZE, BoardCell.CELLSIZE);
+		g.setColor(Color.black);
+		g.drawOval(BoardCell.CELLSIZE*column,BoardCell.CELLSIZE*row, BoardCell.CELLSIZE, BoardCell.CELLSIZE);
+	}
+	
+	public void setTotCol(int t){
+		this.totCol = t;
+		this.row = location/t;
+		this.column = location%t;
+		//System.out.println(totCol);
 	}
 
 	public Card disproveSuggestion(String person, String weapon, String room) {

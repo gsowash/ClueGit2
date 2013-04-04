@@ -1,11 +1,15 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class RoomCell extends BoardCell {
 	private char roomInitial;
 	private DoorDirection doorDirection;
+	private final int DOORWIDTH = 5;
+	private boolean name = false;
 
 	public enum DoorDirection {
 		UP, DOWN, LEFT, RIGHT, NONE
@@ -52,7 +56,11 @@ public class RoomCell extends BoardCell {
 				doorDirection = DoorDirection.LEFT;
 			} else if (direction == 'R'){
 				doorDirection = DoorDirection.RIGHT;
+
 			} else{
+				if (direction == 'N'){
+					name = true;
+				}
 				doorDirection = DoorDirection.NONE;
 			}
 		} else {
@@ -88,8 +96,71 @@ public class RoomCell extends BoardCell {
 
 	@Override
 	void draw(Graphics g) {
-		g.setColor(Color.RED);
-	    g.drawRect(CELLSIZE*row,CELLSIZE*column,CELLSIZE,CELLSIZE);		
-	    g.fillRect(CELLSIZE*row,CELLSIZE*column,CELLSIZE,CELLSIZE);
+		g.setColor(Color.BLUE);
+//	    g.drawRect(CELLSIZE*row,CELLSIZE*column,CELLSIZE,CELLSIZE);		
+//	    g.fillRect(CELLSIZE*row,CELLSIZE*column,CELLSIZE,CELLSIZE);
+		//System.out.println(row + " " + column);
+		
+		
+		
+		switch(doorDirection){
+		case UP:
+			g.fillRect(CELLSIZE*column,CELLSIZE*row,CELLSIZE,DOORWIDTH);
+			break;
+		case DOWN:
+			g.fillRect(CELLSIZE*column,(CELLSIZE*(row+1)- DOORWIDTH),CELLSIZE,DOORWIDTH);
+			break;
+		case RIGHT:
+			g.fillRect((CELLSIZE*(column+1) - DOORWIDTH),CELLSIZE*row,DOORWIDTH,CELLSIZE);
+			break;
+		case LEFT:
+			g.fillRect(CELLSIZE*column,CELLSIZE*row,DOORWIDTH,CELLSIZE);
+			break;
+		case NONE:
+			break;		
+		}
+		
+		if (name){
+			//g.setFont(Font.SANS_SERIF);
+			//Graphics2D g2 = (Graphics2D)g;
+			//System.out.println("yes");
+			g.setFont(new Font(null, Font.BOLD, 14));
+			switch(roomInitial){
+			case 'C':
+				g.drawString("Conservatory", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'K':
+				g.drawString("Kitchen", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'B':
+				g.drawString("Ballroom", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'R':
+				g.drawString("Billiard Room", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'L':
+				g.drawString("Library", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'S':
+				g.drawString("Study", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'D':
+				g.drawString("Dining Room", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'O':
+				g.drawString("Lounge", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'H':
+				g.drawString("Hall", CELLSIZE*column,CELLSIZE*row);
+				break;
+			case 'X':
+				g.drawString("Closet", CELLSIZE*column,CELLSIZE*row);
+				break;
+			
+			}
+			
+			
+			
+		}
 	}
 }

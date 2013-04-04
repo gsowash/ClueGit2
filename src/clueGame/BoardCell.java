@@ -6,13 +6,16 @@ public abstract class BoardCell {
 	protected int row;
 	protected int column;
 	protected int index;
-	static final int CELLSIZE = 20;
+	static final int CELLSIZE = 25;
 	protected int totCol;
 	
 	public BoardCell(){}
 	
 	public BoardCell(int index) {
 		this.index = index;
+		//int col = Board.getNumColumns();
+		
+		
 	}
 	
 	abstract void draw (Graphics g);
@@ -21,7 +24,7 @@ public abstract class BoardCell {
 		this.totCol = t;
 		this.row = index/t;
 		this.column = index%t;
-		
+		//System.out.println(totCol);
 	}
 	
 	public int getIndex() {

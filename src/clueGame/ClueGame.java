@@ -12,8 +12,10 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.border.Border;
 
 import clueGame.Card.CardType;
 
@@ -28,6 +30,8 @@ public class ClueGame extends JFrame{
 	
 	public ClueGame() {		// Default constructor for test purposes only. Use 4 argument ctor below
 		board = new Board("ClueLayout.csv", "ClueLegend.txt");
+		add(board, BorderLayout.CENTER);
+		
 		for (Integer i = 0; i<NUMPLAYERS; i++) {						//players map initialization stub!!
 			players.put(i, new Player());
 		}
@@ -35,7 +39,11 @@ public class ClueGame extends JFrame{
 	
 	public ClueGame(String clueMap, String clueLegend, String cluePlayers, String clueCards) {
 
+		
 		board = new Board(clueMap, clueLegend);
+		
+		Border boardBorder = BorderFactory.createBevelBorder(1);
+		board.setBorder(boardBorder);
 
 		try {
 			loadConfigFilesPlayers(cluePlayers);
@@ -115,6 +123,7 @@ public class ClueGame extends JFrame{
 		catch (IOException e) {
 		    System.err.println("Caught IOException: " + e.getMessage());
 		}
+		board.setPlayers(players);
 	}
 
 	public int numCards(){
