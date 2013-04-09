@@ -3,6 +3,12 @@ package clueGame;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -36,6 +42,8 @@ public class Board extends JPanel
 	
 	public Board(String configFile, String legend) {
 		super();
+		//MouseListener move = new MouseListener();
+		addMouseListener(new BoardListener());
 		//adjMtx = new HashMap<Integer, LinkedList<Integer>>();
 		//targets = new HashSet<BoardCell>();
 		this.configFile = configFile;
@@ -68,15 +76,10 @@ public class Board extends JPanel
 			//value.setTotCol(numColumns);
 			value.draw(g);
 		}
-		
-		//System.out.println(numColumns);
-
-		//g.drawLine(numColumns, y1, x2, y2);
-		
-		
-		
+				
 	}
 	
+		
 	public void loadConfigFiles() throws BadConfigFormatException {
 			loadConfigFilesLegend(legend);//change based on our files
 			loadConfigFilesFormat(configFile); //change name based on our files
@@ -352,6 +355,45 @@ public class Board extends JPanel
 		this.players = players;
 	}
 	
+	class BoardListener implements MouseListener{
+
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			for(BoardCell b : targets)
+			{
+				if(b.containsClick(e.getX(), e.getY())){
+					int n= b.getIndex();
+				}
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+
 	
 
 }

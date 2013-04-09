@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class WalkwayCell extends BoardCell{
+	private Color color = Color.YELLOW;
 	
 	public WalkwayCell() {}
 	
@@ -15,10 +16,14 @@ public class WalkwayCell extends BoardCell{
 	public Boolean isWalkway(){
 		return true;
 	}
+ 	
+ 	public void setColor(Color c){
+ 		this.color = c;
+ 	}
 
 	@Override
 	void draw(Graphics g) {
-		g.setColor(Color.YELLOW);
+		g.setColor(color);
 	    g.fillRect (CELLSIZE*column,CELLSIZE*row,CELLSIZE,CELLSIZE);
 	    
 	    g.setColor(Color.BLACK);

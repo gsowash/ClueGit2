@@ -1,10 +1,14 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;	//test delete later
@@ -28,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.border.Border;
 
+import clueGame.Board.BoardListener;
 import clueGame.Card.CardType;
 
 public class ClueGame extends JFrame{
@@ -42,7 +47,7 @@ public class ClueGame extends JFrame{
 	private ArrayList<Card> seenCards = new ArrayList<Card>();
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	private Solution solution = new Solution();
-	//Graphics g;
+	private Boolean humanMove = true;
 	
 	public ClueGame() {		// Default constructor for test purposes only. Use 4 argument ctor below
 		board = new Board("ClueLayout.csv", "ClueLegend.txt");
@@ -60,6 +65,8 @@ public class ClueGame extends JFrame{
 		board = new Board(clueMap, clueLegend);
 		controlPanel = new ControlPanel();
 		controlPanel.nextPlayer.addActionListener(new ButtonListener());
+		board.addMouseListener(new BoardListener());
+		
 
 		
 		Border boardBorder = BorderFactory.createBevelBorder(1);
@@ -357,11 +364,19 @@ public class ClueGame extends JFrame{
 					controlPanel.showSuggestion(s.getPerson(), s.getRoom(), s.getWeapon());
 					Card c = handleSuggestion(s.getPerson(),s.getRoom(), s.getWeapon(), currPlayer );
 					controlPanel.showResult(c.getCardName());
+					
+					//currPlayer++;
 				}
 			}else if (currPlayer==0)
 			{
-				
-				((HumanPlayer)players.get(currPlayer)).displayTargets(board.getTargets());
+				humanMove = false;
+				HashSet<BoardCell> places = board.getTargets();
+				for (BoardCell b: places){
+					if(b.isWalkway()){
+						((WalkwayCell)b).setColor(Color.CYAN);
+					}
+				}
+				//((HumanPlayer)players.get(currPlayer)).displayTargets(board.getTargets());
 
 			}
 
@@ -369,10 +384,10 @@ public class ClueGame extends JFrame{
 			currPlayer++;
 			if (currPlayer>=NUMPLAYERS)
 				currPlayer=0;
-			if (1==0)
-			{
-				endGame=false;
-			}
+//			if (1==0)
+//			{
+//				endGame=false;
+//			}
 
 		//}
 	}
@@ -392,12 +407,74 @@ public class ClueGame extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == controlPanel.nextPlayer){
-				
-				controlPanel.showSuggestion(null, null, null);
-				controlPanel.showResult(null);
-				runGame();
+				if(humanMove){
+					controlPanel.showSuggestion(null, null, null);
+					controlPanel.showResult(null);
+					runGame();
+				} else {
+					//JDialog j = new JDialog();
+					JOptionPane.showMessageDialog(null, "You must move first.");
+				}
+
 			}
 
 		}
 	}
+	
+	
+class BoardListener implements MouseListener{
+
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			HashSet<BoardCell> places = board.getTargets();
+			if (currPlayer == 1){
+				for(BoardCell b : places)
+				{
+					if(b.containsClick(e.getX(), e.getY())){
+						int n= b.getIndex();
+						players.get(currPlayer-1).setLocation(n);
+						
+						humanMove = true;
+						//currPlayer++;
+					}
+				}
+				
+			}
+			if(humanMove){
+				for (BoardCell c: places){
+					if(c.isWalkway()){
+						((WalkwayCell)c).setColor(Color.YELLOW);
+					}
+				}	
+				repaint();
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+
 }

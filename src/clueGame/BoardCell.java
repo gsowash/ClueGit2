@@ -1,12 +1,14 @@
 package clueGame;
 
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 public abstract class BoardCell {
 	protected int row;
 	protected int column;
 	protected int index;
-	static final int CELLSIZE = 30;
+	static final int CELLSIZE = 20;
 	protected int totCol;
 	
 	public BoardCell(){}
@@ -26,6 +28,14 @@ public abstract class BoardCell {
 		this.column = index%t;
 		//System.out.println(totCol);
 	}
+	
+	public boolean containsClick(int mouseX, int mouseY) {
+		  Rectangle rect = new Rectangle(CELLSIZE*column,CELLSIZE*row,CELLSIZE,CELLSIZE);
+		  if (rect.contains(new Point(mouseX, mouseY))) {
+		    //return true;
+		  }else return false;
+		  return true;
+		}
 	
 	public int getIndex() {
 		return index;
