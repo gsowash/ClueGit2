@@ -1,5 +1,7 @@
 package clueGame;
 
+import java.util.HashSet;
+
 public class HumanPlayer extends Player {
 
 	public HumanPlayer(String playerName, String strColor, int location) {
@@ -8,6 +10,13 @@ public class HumanPlayer extends Player {
 
 	public HumanPlayer() {
 		super();
+	}
+	
+	public void displayTargets(HashSet<BoardCell> targets){
+//		for(BoardCell b: targets){
+//			b.draw();
+//		}
+		
 	}
 
 }

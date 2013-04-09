@@ -20,7 +20,7 @@ public class ControlPanel extends JPanel
 	private JTextField roll;
 	private JTextField guess;
 	private JTextField guessResult;
-	private JButton nextPlayer;
+	public JButton nextPlayer;
 	private JButton accusation;
 	private JLabel whoseTurnLabel;
 	private JLabel rollLabel;
@@ -109,11 +109,29 @@ public class ControlPanel extends JPanel
 		whoseTurn.setText(n);
 	}
 	
+	public void showSuggestion(String person, String place, String weapon){
+		if (person == null){
+			guess.setText(" ");
+		}else {
+			guess.setText(person + " in the " + place + " with the " + weapon);
+		}
+	}
+	
+	public void showResult(String n){
+		if (n == null){
+			guessResult.setText(" ");
+		}else {
+			guessResult.setText(n);
+		}
+	}
+	
 	class ButtonListener implements ActionListener{
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == nextPlayer){
+				
+			}
 			
 		}
 		

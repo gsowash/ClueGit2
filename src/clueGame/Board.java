@@ -32,6 +32,7 @@ public class Board extends JPanel
 	private String configFile;
 	private String legend;
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
+	Graphics g;
 	
 	public Board(String configFile, String legend) {
 		super();
@@ -297,6 +298,11 @@ public class Board extends JPanel
 		RoomCell room = new RoomCell();
 		room = (RoomCell)cells.get(index);
 		return room;
+	}
+	
+	public Boolean isRoom(int index) {
+		Boolean t = cells.get(index).isRoom();
+		return t;
 	}
 
 	public Map<Character, String> getRooms() {

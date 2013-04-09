@@ -33,7 +33,7 @@ import clueGame.Card.CardType;
 public class ClueGame extends JFrame{
 	
 	private Board board;
-	private ControlPanel controlPanel;
+	public ControlPanel controlPanel;
 	private DisplayCards displayCards;
 	public static final int NUMPLAYERS=6;
 	private int currPlayer;
@@ -55,10 +55,11 @@ public class ClueGame extends JFrame{
 	
 	public ClueGame(String clueMap, String clueLegend, String cluePlayers, String clueCards) {
 
+		currPlayer = 0;
 		detectiveDropdownSetup ();
 		board = new Board(clueMap, clueLegend);
 		controlPanel = new ControlPanel();
-		
+		controlPanel.nextPlayer.addActionListener(new ButtonListener());
 
 		
 		Border boardBorder = BorderFactory.createBevelBorder(1);
@@ -338,9 +339,11 @@ public class ClueGame extends JFrame{
 	public void runGame()
 	{
 		boolean endGame;
-		currPlayer=1;
-		while (true)
-		{
+//		currPlayer=1;
+//		while (true)
+//		{
+		//controlPanel.action(arg0, controlPanel.nextPlayer);	
+		
 			controlPanel.whoseTurn(players.get(currPlayer).getPlayerName());
 			roll = rollDice();
 			controlPanel.Dice(roll);
@@ -348,28 +351,53 @@ public class ClueGame extends JFrame{
 			if (currPlayer>0)
 			{
 				players.get(currPlayer).setLocation(((ComputerPlayer)players.get(currPlayer)).pickLocation(board.getTargets()));
+				int spot = players.get(currPlayer).getLocation();
+				if (board.isRoom(spot)){
+					Suggestion s = ((ComputerPlayer)players.get(currPlayer)).createSuggestion();
+					controlPanel.showSuggestion(s.getPerson(), s.getRoom(), s.getWeapon());
+					Card c = handleSuggestion(s.getPerson(),s.getRoom(), s.getWeapon(), currPlayer );
+					controlPanel.showResult(c.getCardName());
+				}
+			}else if (currPlayer==0)
+			{
+				
+				((HumanPlayer)players.get(currPlayer)).displayTargets(board.getTargets());
+
 			}
-			//	else if (currPlayer==0)
-			//	{
 
-			//	}
-
+			repaint();
 			currPlayer++;
 			if (currPlayer>=NUMPLAYERS)
-				currPlayer=1;
+				currPlayer=0;
 			if (1==0)
 			{
 				endGame=false;
 			}
 
-		}
+		//}
 	}
 	
 	public static void main(String[] args) {
 		ClueGame mainInstance = new ClueGame("ClueLayout.csv","ClueLegend.txt","CluePlayers.txt","ClueCards.txt");
 		JOptionPane.showMessageDialog(mainInstance, "You are " + mainInstance.players.get(0).getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 		mainInstance.setVisible(true);
-		mainInstance.runGame();
+		//mainInstance.runGame();
 	}
-	
+
+
+
+
+	class ButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == controlPanel.nextPlayer){
+				
+				controlPanel.showSuggestion(null, null, null);
+				controlPanel.showResult(null);
+				runGame();
+			}
+
+		}
+	}
 }
