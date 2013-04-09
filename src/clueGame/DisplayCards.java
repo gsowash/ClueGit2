@@ -15,7 +15,7 @@ public class DisplayCards extends JPanel
 	private JTextField peopleField;
 	private JTextField roomsField;
 	private JTextField weaponsField;
-	private String person, weapon, place;
+	private String person = "", weapon = "", place = "";
 
 	DisplayCards (ArrayList<Card> cardList)
 	{
@@ -33,13 +33,25 @@ public class DisplayCards extends JPanel
 		for(Card c: cardList){
 			switch (c.getCardType()){
 			case PERSON:
-				person = c.getCardName();
+				if (person.equals("")){
+					person = c.getCardName();
+				}else{
+				person = person + ", " +c.getCardName();
+				}
 				break;
 			case WEAPON:
-				weapon = c.getCardName();
+				if (weapon.equals("")){
+					weapon = c.getCardName();
+				}else{
+				weapon = weapon + ", " + c.getCardName();
+				}
 				break;
 			case ROOM:
-				place = c.getCardName();
+				if (place.equals("")){
+					place = c.getCardName();
+				}else{
+				place = place  + ", " + c.getCardName();
+				}
 				break;			
 			}
 		}
