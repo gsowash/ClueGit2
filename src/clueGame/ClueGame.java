@@ -1,12 +1,14 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;	//test delete later
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;  //test delete later
 import javax.swing.JTextArea;   //test delete later
 
@@ -31,11 +33,16 @@ import clueGame.Card.CardType;
 public class ClueGame extends JFrame{
 	
 	private Board board;
+	private ControlPanel controlPanel;
+	private DisplayCards displayCards;
 	public static final int NUMPLAYERS=6;
+	private int currPlayer;
+	int roll;
 	private ArrayList<Card> cards = new ArrayList<Card>();
 	private ArrayList<Card> seenCards = new ArrayList<Card>();
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	private Solution solution = new Solution();
+	//Graphics g;
 	
 	public ClueGame() {		// Default constructor for test purposes only. Use 4 argument ctor below
 		board = new Board("ClueLayout.csv", "ClueLegend.txt");
@@ -48,23 +55,11 @@ public class ClueGame extends JFrame{
 	
 	public ClueGame(String clueMap, String clueLegend, String cluePlayers, String clueCards) {
 
-		 JMenuBar topMenu = new JMenuBar();
-	        JMenu fileDropDown = new JMenu("File");
-	        topMenu.add(fileDropDown);
-	        JMenuItem detectiveDropButton = new JMenuItem ("Detective Notes");
-	        fileDropDown.add(detectiveDropButton);
-	        setJMenuBar(topMenu);
-	        
-	        class detectiveAction implements ActionListener{
-				@Override
-				public void actionPerformed(ActionEvent arg0){
-					JFrame win = new DetectiveNotes();
-			        win.setVisible(true);
-				}
-	        }
-	        detectiveDropButton.addActionListener(new detectiveAction());
-		
+		detectiveDropdownSetup ();
 		board = new Board(clueMap, clueLegend);
+		controlPanel = new ControlPanel();
+		
+
 		
 		Border boardBorder = BorderFactory.createBevelBorder(1);
 		board.setBorder(boardBorder);
@@ -83,12 +78,41 @@ public class ClueGame extends JFrame{
 		}	
 		dealCardsToPlayers();
 		
+		displayCards = new DisplayCards(players.get(0).getMyCards());
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue Command Interface");
-		setSize(800,800);
+		setSize(920,900);
+		
 		add(board,BorderLayout.CENTER);
-
+		add(controlPanel,BorderLayout.SOUTH);
+		add(displayCards,BorderLayout.EAST);
+	}
+	
+	private void detectiveDropdownSetup ()
+	{
+		 JMenuBar topMenu = new JMenuBar();
+	        JMenu fileDropDown = new JMenu("File");
+	        topMenu.add(fileDropDown);
+	        JMenuItem detectiveDropButton = new JMenuItem ("Detective Notes");
+	        fileDropDown.add(detectiveDropButton);
+	        setJMenuBar(topMenu);
+	        
+	        class detectiveAction implements ActionListener{
+				@Override
+				public void actionPerformed(ActionEvent arg0){
+					JFrame win = new DetectiveNotes();
+			        win.setVisible(true);
+				}
+	        }
+	        detectiveDropButton.addActionListener(new detectiveAction());
+	}
+	
+	private int rollDice()
+	{
+		Random generator = new Random();
+		int diceNum = Math.abs(generator.nextInt(6)+1);
+		return diceNum;
 	}
 	
 	private void loadConfigFilesCards(String fileName) throws BadConfigFormatException {
@@ -148,6 +172,10 @@ public class ClueGame extends JFrame{
 		    System.err.println("Caught IOException: " + e.getMessage());
 		}
 		board.setPlayers(players);
+		for(Player value: players.values()){
+			value.setTotCol(board.getNumColumns());
+			
+		}
 	}
 
 	public int numCards(){
@@ -307,9 +335,41 @@ public class ClueGame extends JFrame{
 		solution = new Solution(person, room, weapon);
 	}	
 	
+	public void runGame()
+	{
+		boolean endGame;
+		currPlayer=1;
+		while (true)
+		{
+			controlPanel.whoseTurn(players.get(currPlayer).getPlayerName());
+			roll = rollDice();
+			controlPanel.Dice(roll);
+			board.calcTargets(players.get(currPlayer).getLocation(), roll);
+			if (currPlayer>0)
+			{
+				players.get(currPlayer).setLocation(((ComputerPlayer)players.get(currPlayer)).pickLocation(board.getTargets()));
+			}
+			//	else if (currPlayer==0)
+			//	{
+
+			//	}
+
+			currPlayer++;
+			if (currPlayer>=NUMPLAYERS)
+				currPlayer=1;
+			if (1==0)
+			{
+				endGame=false;
+			}
+
+		}
+	}
+	
 	public static void main(String[] args) {
-		ClueGame gui = new ClueGame("ClueLayout.csv","ClueLegend.txt","CluePlayers.txt","ClueCards.txt");
-		gui.setVisible(true);
+		ClueGame mainInstance = new ClueGame("ClueLayout.csv","ClueLegend.txt","CluePlayers.txt","ClueCards.txt");
+		JOptionPane.showMessageDialog(mainInstance, "You are " + mainInstance.players.get(0).getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
+		mainInstance.setVisible(true);
+		mainInstance.runGame();
 	}
 	
 }

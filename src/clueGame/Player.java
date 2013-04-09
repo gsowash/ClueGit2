@@ -61,8 +61,6 @@ public class Player {
 	
 	public void draw(Graphics g){
 		g.setColor(color);
-		
-		
 		g.fillOval(BoardCell.CELLSIZE*column,BoardCell.CELLSIZE*row, BoardCell.CELLSIZE, BoardCell.CELLSIZE);
 		g.setColor(Color.black);
 		g.drawOval(BoardCell.CELLSIZE*column,BoardCell.CELLSIZE*row, BoardCell.CELLSIZE, BoardCell.CELLSIZE);
@@ -146,6 +144,9 @@ public class Player {
 
 	public void setLocation(int location) {
 		this.location = location;
+		this.row = location/totCol;
+		this.column = location%totCol;
+		
 	}
 
 	public ArrayList<Card> getMyCards() {

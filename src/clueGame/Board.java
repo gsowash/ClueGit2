@@ -57,18 +57,22 @@ public class Board extends JPanel
 	
 	public void paintComponent(Graphics g)
 	{
-		//System.out.println(numColumns);
 		super.paintComponent(g);
 		for (BoardCell cell : cells)
 		{
 			cell.draw(g);
 		}
-		//g.drawLine(numColumns, y1, x2, y2);
 		
 		for(Player value: players.values()){
-			value.setTotCol(numColumns);
+			//value.setTotCol(numColumns);
 			value.draw(g);
 		}
+		
+		//System.out.println(numColumns);
+
+		//g.drawLine(numColumns, y1, x2, y2);
+		
+		
 		
 	}
 	
@@ -121,6 +125,9 @@ public class Board extends JPanel
 		//System.out.println(numColumns);
 		for (BoardCell c: cells){
 			c.setTotCol(numColumns);
+		}
+		for(Player value: players.values()){
+			value.setTotCol(numColumns);
 		}
 		
 	}

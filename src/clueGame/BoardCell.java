@@ -6,7 +6,7 @@ public abstract class BoardCell {
 	protected int row;
 	protected int column;
 	protected int index;
-	static final int CELLSIZE = 25;
+	static final int CELLSIZE = 30;
 	protected int totCol;
 	
 	public BoardCell(){}
