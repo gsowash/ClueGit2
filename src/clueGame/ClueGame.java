@@ -372,9 +372,8 @@ public class ClueGame extends JFrame{
 				humanMove = false;
 				HashSet<BoardCell> places = board.getTargets();
 				for (BoardCell b: places){
-					if(b.isWalkway()){
-						((WalkwayCell)b).setColor(Color.CYAN);
-					}
+					b.setColor(Color.CYAN);
+					
 				}
 				//((HumanPlayer)players.get(currPlayer)).displayTargets(board.getTargets());
 
@@ -429,23 +428,29 @@ class BoardListener implements MouseListener{
 		public void mouseClicked(MouseEvent e) {
 			HashSet<BoardCell> places = board.getTargets();
 			if (currPlayer == 1){
+				Boolean clicked = false;
 				for(BoardCell b : places)
 				{
 					if(b.containsClick(e.getX(), e.getY())){
 						int n= b.getIndex();
 						players.get(currPlayer-1).setLocation(n);
-						
+						clicked = true;
 						humanMove = true;
 						//currPlayer++;
 					}
+						
+					
+				}
+				if(!clicked){
+					JOptionPane.showMessageDialog(null, "That is not an available. Try a blue one.");
 				}
 				
 			}
 			if(humanMove){
 				for (BoardCell c: places){
 					if(c.isWalkway()){
-						((WalkwayCell)c).setColor(Color.YELLOW);
-					}
+						c.setColor(Color.YELLOW);
+					}else c.setColor(Color.WHITE);
 				}	
 				repaint();
 			}

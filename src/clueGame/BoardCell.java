@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -10,6 +11,7 @@ public abstract class BoardCell {
 	protected int index;
 	static final int CELLSIZE = 20;
 	protected int totCol;
+	protected Color color;
 	
 	public BoardCell(){}
 	
@@ -29,12 +31,16 @@ public abstract class BoardCell {
 		//System.out.println(totCol);
 	}
 	
+	public void setColor(Color c){
+ 		this.color = c;
+ 	}
+	
 	public boolean containsClick(int mouseX, int mouseY) {
 		  Rectangle rect = new Rectangle(CELLSIZE*column,CELLSIZE*row,CELLSIZE,CELLSIZE);
 		  if (rect.contains(new Point(mouseX, mouseY))) {
-		    //return true;
+		    return true;
 		  }else return false;
-		  return true;
+		 // return true;
 		}
 	
 	public int getIndex() {

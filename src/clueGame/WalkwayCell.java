@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class WalkwayCell extends BoardCell{
-	private Color color = Color.YELLOW;
+	
 	
 	public WalkwayCell() {}
 	
 	public WalkwayCell(int index) {
+		
 		super(index);
+		color = Color.YELLOW;
+		
 	}
 	
  	@Override
@@ -17,9 +20,7 @@ public class WalkwayCell extends BoardCell{
 		return true;
 	}
  	
- 	public void setColor(Color c){
- 		this.color = c;
- 	}
+ 	
 
 	@Override
 	void draw(Graphics g) {

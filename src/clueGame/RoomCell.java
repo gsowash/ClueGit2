@@ -17,9 +17,11 @@ public class RoomCell extends BoardCell {
 
 	public RoomCell() {
 		super();
+		color = Color.WHITE;
 	}
 	public RoomCell(int index) {
 		super(index);
+		color = Color.WHITE;
 	}
 
 	public RoomCell(String room) {
@@ -96,10 +98,17 @@ public class RoomCell extends BoardCell {
 
 	@Override
 	void draw(Graphics g) {
+	
+		if(color == Color.CYAN){
+			g.setColor(color);
+			g.fillRect(CELLSIZE*column,CELLSIZE*row,CELLSIZE,CELLSIZE);
+			g.setColor(Color.BLACK);
+			g.drawRect(CELLSIZE*column,CELLSIZE*row,CELLSIZE,CELLSIZE);
+		}
+		
+		
 		g.setColor(Color.BLUE);
-//	    g.drawRect(CELLSIZE*row,CELLSIZE*column,CELLSIZE,CELLSIZE);		
-//	    g.fillRect(CELLSIZE*row,CELLSIZE*column,CELLSIZE,CELLSIZE);
-		//System.out.println(row + " " + column);
+
 		
 		
 		
