@@ -9,6 +9,7 @@ import clueGame.Card.CardType;
 
 public class ComputerPlayer extends Player {
 
+	private Suggestion accuse = null;
 	private char lastRoomVisited;
 	Random generator = new Random();
 	
@@ -169,5 +170,15 @@ public class ComputerPlayer extends Player {
 		
 		return new Suggestion(tempDeck.get(randomIndex).getCardName(), roomName, tempDeck.get(randomIndex2).getCardName());
 	}
+
+	public Suggestion getAccuse() {
+		return accuse;
+	}
+
+	public void setAccuse(Suggestion accuse) {
+		this.accuse = accuse;
+	}
+	
+	
 
 }

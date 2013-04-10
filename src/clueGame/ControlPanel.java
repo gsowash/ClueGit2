@@ -21,7 +21,7 @@ public class ControlPanel extends JPanel
 	private JTextField guess;
 	private JTextField guessResult;
 	public JButton nextPlayer;
-	private JButton accusation;
+	public JButton accusation;
 	private JLabel whoseTurnLabel;
 	private JLabel rollLabel;
 	private JLabel guessLabel;
@@ -60,6 +60,7 @@ public class ControlPanel extends JPanel
 		//First cell of top row
 		whoseTurnLabel = new JLabel("Whose Turn?");
 		whoseTurn = new JTextField (18);
+		whoseTurn.setEditable(false);
 		whoseBox.add(whoseTurnLabel,BorderLayout.NORTH);
 		whoseBox.add(whoseTurn,BorderLayout.CENTER);
 		whoseBox.setBorder(spacerBorder);
@@ -76,6 +77,7 @@ public class ControlPanel extends JPanel
 		//First cell of bottom row
 		rollLabel = new JLabel ("Roll:");
 		roll = new JTextField (5);
+		roll.setEditable(false);
 		first.add(rollLabel);
 		first.add(roll);
 		Border titlefirst = BorderFactory.createTitledBorder(borderAppearance,"Die");
@@ -83,7 +85,8 @@ public class ControlPanel extends JPanel
 		
 		//Second cell of bottom row
 		guessLabel = new JLabel ("Guess:");
-		guess = new JTextField (25);
+		guess = new JTextField (35);
+		guess.setEditable(false);
 		second.add(guessLabel);
 		second.add(guess);
 		Border titlesecond = BorderFactory.createTitledBorder(borderAppearance,"Guess");
@@ -91,7 +94,8 @@ public class ControlPanel extends JPanel
 		
 		//Third cell of bottom row
 		guessResultLabel = new JLabel ("Response:");
-		guessResult = new JTextField (25);
+		guessResult = new JTextField (20);
+		guessResult.setEditable(false);
 		third.add(guessResultLabel);
 		third.add(guessResult);
 		Border titlethird = BorderFactory.createTitledBorder(borderAppearance,"Guess Result");

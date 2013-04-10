@@ -65,6 +65,7 @@ public class ClueGame extends JFrame{
 		board = new Board(clueMap, clueLegend);
 		controlPanel = new ControlPanel();
 		controlPanel.nextPlayer.addActionListener(new ButtonListener());
+		controlPanel.accusation.addActionListener(new ButtonListener());
 		board.addMouseListener(new BoardListener());
 		
 
@@ -347,25 +348,53 @@ public class ClueGame extends JFrame{
 	{
 		boolean endGame;
 //		currPlayer=1;
-//		while (true)
-//		{
+		//		while (true)
+		//		{
 		//controlPanel.action(arg0, controlPanel.nextPlayer);	
-		
-			controlPanel.whoseTurn(players.get(currPlayer).getPlayerName());
-			roll = rollDice();
-			controlPanel.Dice(roll);
-			board.calcTargets(players.get(currPlayer).getLocation(), roll);
-			if (currPlayer>0)
-			{
+
+			
+		controlPanel.whoseTurn(players.get(currPlayer).getPlayerName());
+		roll = rollDice();
+		controlPanel.Dice(roll);
+		board.calcTargets(players.get(currPlayer).getLocation(), roll);
+		if (currPlayer>0)
+		{
+			Suggestion accuse = ((ComputerPlayer)players.get(currPlayer)).getAccuse();
+			if(accuse != null){
+
+				controlPanel.showSuggestion("Accusing " + accuse.getPerson(), accuse.getRoom(), accuse.getWeapon());
+				if(accuse.equals(solution)){
+					JOptionPane.showMessageDialog(null, players.get(currPlayer).getPlayerName() + " wins the game!");
+				}else{
+					controlPanel.showResult("False");
+					//JOptionPane.showMessageDialog(null, players.get(currPlayer).getPlayerName() + " doesn't win");
+				}
+
+
+			}else{
+
 				players.get(currPlayer).setLocation(((ComputerPlayer)players.get(currPlayer)).pickLocation(board.getTargets()));
 				int spot = players.get(currPlayer).getLocation();
 				if (board.isRoom(spot)){
 					Suggestion s = ((ComputerPlayer)players.get(currPlayer)).createSuggestion();
+
+					for(Player value: players.values()){
+						if(s.getPerson().equalsIgnoreCase(value.getPlayerName())){
+							value.setLocation(players.get(currPlayer).getLocation());
+						}
+					}					
+
 					controlPanel.showSuggestion(s.getPerson(), s.getRoom(), s.getWeapon());
 					Card c = handleSuggestion(s.getPerson(),s.getRoom(), s.getWeapon(), currPlayer );
-					controlPanel.showResult(c.getCardName());
-					
-					//currPlayer++;
+						if (c == null){
+							controlPanel.showResult("Cannot disprove");
+							((ComputerPlayer)players.get(currPlayer)).setAccuse(s);
+						}else{
+							controlPanel.showResult(c.getCardName());
+						}
+
+						//currPlayer++;
+					}
 				}
 			}else if (currPlayer==0)
 			{
@@ -415,6 +444,18 @@ public class ClueGame extends JFrame{
 					JOptionPane.showMessageDialog(null, "You must move first.");
 				}
 
+			}else if(e.getSource() == controlPanel.accusation){
+				if(currPlayer == 1 && !humanMove){
+					int spot = players.get(currPlayer-1).getLocation();
+					if (board.isRoom(spot)){
+						JOptionPane.showMessageDialog(null, "ACCUSING!!");
+					}else{
+						JOptionPane.showMessageDialog(null, "YOU GOTTA BE IN A ROOM FOOL!!");
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "IT AIN'T YO TURN!!");
+				}
+				
 			}
 
 		}
@@ -436,7 +477,9 @@ class BoardListener implements MouseListener{
 						players.get(currPlayer-1).setLocation(n);
 						clicked = true;
 						humanMove = true;
-						//currPlayer++;
+						//Also make suggestion window pop up
+						
+						
 					}
 						
 					
@@ -453,6 +496,13 @@ class BoardListener implements MouseListener{
 					}else c.setColor(Color.WHITE);
 				}	
 				repaint();
+			}
+			int spot = players.get(currPlayer-1).getLocation();
+			if(board.isRoom(spot)){
+				//JOptionPane.showMessageDialog(null, "SUGGEST!");
+				
+				JFrame win = new AccusationWindow(((RoomCell)board.getCellAt(players.get(currPlayer-1).getLocation())).getInitial());
+				win.setVisible(true);
 			}
 		}
 
