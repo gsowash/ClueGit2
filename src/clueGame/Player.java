@@ -56,6 +56,8 @@ public class Player {
 		catch (Exception e) {  
 			color = null; // Not defined } 
 		}
+		
+		seenCards = myCards;
 
 	}
 	
@@ -120,6 +122,7 @@ public class Player {
 	
 	public void giveCardToPlayer(Card cardIn) {
 		myCards.add(cardIn);
+		seenCards.add(cardIn);
 	}
 
 	public String getPlayerName() {

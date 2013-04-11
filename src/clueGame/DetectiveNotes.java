@@ -37,28 +37,8 @@ public class DetectiveNotes extends JFrame{
 
 	private void createDetective()
 	{
-        detective = new JMenuItem("Copy");
-        detective.setEnabled(false);
         
-////////////////////////////////////////////////////////////////////////
-//        JMenuBar topMenu = new JMenuBar();
-//        JMenu fileDropDown = new JMenu("File");
-//        topMenu.add(fileDropDown);
-//        JMenuItem detectiveDropButton = new JMenuItem ("Detective Notes");
-//        fileDropDown.add(detectiveDropButton);
-//        setJMenuBar(topMenu);
-//        
-//        class detectiveAction implements ActionListener{
-//			@Override
-//			public void actionPerformed(ActionEvent arg0){
-//				JFrame win = new DetectiveNotes();
-//		        win.setVisible(true);
-//			}
-//        }
-//        detectiveDropButton.addActionListener(new detectiveAction());
-//        
-////////////////////////////////////////////////////////////////////////
-
+        
 		Border borderAppearance = BorderFactory.createBevelBorder(1);
 		
 		JPanel container = new JPanel();
@@ -152,9 +132,9 @@ public class DetectiveNotes extends JFrame{
 		
 	}
 	
-	public static void main(String[] args) {
-		DetectiveNotes gui = new DetectiveNotes();
-		gui.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		DetectiveNotes gui = new DetectiveNotes();
+//		gui.setVisible(true);
+//	}
 
 }

@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JDialog;
 import javax.swing.JMenu;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
@@ -45,6 +48,7 @@ public class ClueGame extends JFrame{
 	int roll;
 	private ArrayList<Card> cards = new ArrayList<Card>();
 	private ArrayList<Card> seenCards = new ArrayList<Card>();
+	public ArrayList<Card> unSeenCards = new ArrayList<Card>();
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	private Solution solution = new Solution();
 	private Boolean humanMove = true;
@@ -113,15 +117,22 @@ public class ClueGame extends JFrame{
 	        JMenuItem detectiveDropButton = new JMenuItem ("Detective Notes");
 	        fileDropDown.add(detectiveDropButton);
 	        setJMenuBar(topMenu);
-	        
+	        final JFrame win = new DetectiveNotes();
 	        class detectiveAction implements ActionListener{
 				@Override
 				public void actionPerformed(ActionEvent arg0){
-					JFrame win = new DetectiveNotes();
 			        win.setVisible(true);
+			        win.addWindowListener(new WindowAdapter()
+					{
+						@Override
+						public void windowClosing(WindowEvent e)
+						{
+							win.setVisible(false);
+						}
+					});
 				}
 	        }
-	        detectiveDropButton.addActionListener(new detectiveAction());
+	        detectiveDropButton.addActionListener(new detectiveAction());		
 	}
 	
 	private int rollDice()
@@ -155,6 +166,7 @@ public class ClueGame extends JFrame{
 		catch (IOException e) {
 		    System.err.println("Caught IOException: " + e.getMessage());
 		}
+		unSeenCards = cards;
 	}
 
 	private void loadConfigFilesPlayers(String fileName) throws BadConfigFormatException {
@@ -261,32 +273,26 @@ public class ClueGame extends JFrame{
 		for (int i = 0; i < players.size(); i++) {
 			players.get(i).setDeck(cards);
 		}
+		
+		Random rn = new Random();
+		int w = Math.abs(rn.nextInt() % 6)  + 6;
+		int r = Math.abs(rn.nextInt() % 9) + 12;
+		int p = Math.abs(rn.nextInt() % 6);
+		int cw= 0, cr = 0, cp = 0;
+		
+		
+		String person = null, weapon = null, room = null;
+		person = cards.get(p).getCardName();
+		dealtCards.add(p);
+		weapon = cards.get(w).getCardName();
+		dealtCards.add(w);
+		room = cards.get(r).getCardName();
+		dealtCards.add(r);
+	
+		
+		solution.setSolution(person,  room, weapon);
 
-		
-		while (dealtCards.size() < 3) {
-			int randomCard = Math.abs(generator.nextInt()%21);		// Random card index generated
-			if (!dealtCards.contains(randomCard)) {			// Check if the current index has not been deal
-				if (randomCard < 6 && !solutionHasPerson) {
-					solutionHasPerson = true;
-					cardsSolution.add(cards.get(randomCard));
-					dealtCards.add(randomCard);			// Adds the dealt card to the list
-					personIndex = cardsSolution.size() - 1;
-				} else if (randomCard < 12 && !solutionHasWeapon) {
-					solutionHasWeapon = true;
-					cardsSolution.add(cards.get(randomCard));
-					dealtCards.add(randomCard);			// Adds the dealt card to the list
-					weaponIndex = cardsSolution.size() - 1;
-				} else if (!solutionHasRoom) {
-					solutionHasRoom = true;
-					cardsSolution.add(cards.get(randomCard));
-					dealtCards.add(randomCard);			// Adds the dealt card to the list
-					roomIndex = cardsSolution.size() - 1;
-				}	
-			}
-		}
-		
-		solution = new Solution(cardsSolution.get(personIndex), cardsSolution.get(weaponIndex), cardsSolution.get(roomIndex));
-		
+	
 		
 		while (dealtCards.size() < cards.size()) {		// While cards dealt to hand < cards in deck
 			int randomCard = Math.abs(generator.nextInt()%21);		// Random card index generated
@@ -368,12 +374,16 @@ public class ClueGame extends JFrame{
 		{
 			Suggestion accuse = ((ComputerPlayer)players.get(currPlayer)).getAccuse();
 			if(accuse != null){
+				String accusationin =  accuse.getPerson() + " in the " + accuse.getRoom() + " with the " + accuse.getWeapon();
+				//JOptionPane.showMessageDialog(null, players.get(currPlayer).getPlayerName() + "is accusing " + accuse.getPerson(), accuse.getRoom(), accuse.getWeapon() + "\nNice try. Not Quite.");
 
 				controlPanel.showSuggestion("Accusing " + accuse.getPerson(), accuse.getRoom(), accuse.getWeapon());
 				if(accuse.equals(solution)){
-					JOptionPane.showMessageDialog(null, players.get(currPlayer).getPlayerName() + " wins the game!");
+					JOptionPane.showMessageDialog(null, players.get(currPlayer).getPlayerName() + " wins the game! \nThey guessed\n" + accusationin);
 				}else{
-					controlPanel.showResult("False");
+					JOptionPane.showMessageDialog(null, players.get(currPlayer).getPlayerName() + " accused \n" + accusationin + "\n but not right");
+					((ComputerPlayer)players.get(currPlayer)).setAccuse(null);
+					//controlPanel.showResult("False");
 					//JOptionPane.showMessageDialog(null, players.get(currPlayer).getPlayerName() + " doesn't win");
 				}
 
@@ -395,9 +405,22 @@ public class ClueGame extends JFrame{
 					Card c = handleSuggestion(s.getPerson(),s.getRoom(), s.getWeapon(), currPlayer );
 						if (c == null){
 							controlPanel.showResult("Cannot disprove");
+//							String r = null;
+//							for(Card p: unSeenCards){
+//								if(p.getCardType() == CardType.ROOM){
+//									r= p.getCardName();
+//								}
+//							}
+//							if(!r.equals(null)){
+//								Suggestion accusing = new Suggestion(s.getPerson(), r,  s.getWeapon());
+////							
+//								((ComputerPlayer)players.get(currPlayer)).setAccuse(accusing);
+//							}
+
 							((ComputerPlayer)players.get(currPlayer)).setAccuse(s);
 						}else{
 							controlPanel.showResult(c.getCardName());
+							unSeenCards.remove(c);
 						}
 
 						//currPlayer++;
@@ -431,7 +454,6 @@ public class ClueGame extends JFrame{
 		ClueGame mainInstance = new ClueGame("ClueLayout.csv","ClueLegend.txt","CluePlayers.txt","ClueCards1.txt");
 		JOptionPane.showMessageDialog(mainInstance, "You are " + mainInstance.players.get(0).getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 		mainInstance.setVisible(true);
-		//mainInstance.runGame();
 	}
 
 
@@ -495,11 +517,11 @@ public class ClueGame extends JFrame{
 
 					if(solution.equals(test) ){
 						JOptionPane.showMessageDialog(null, "THAT'S IT! YOU WON!\n" + person + " in the " + room + " with the " + weapon);
+						dispose();
 					}else{
-						//JOptionPane answer = new JOptionPane();
-						//					answer.setSize(60, 60);
-						//					answer.set
-						JOptionPane.showMessageDialog(null, "Nice try. it's really\n" + solution.getPerson() + " in the " + solution.getRoom() + " with the " + solution.getWeapon());
+						
+						JOptionPane.showMessageDialog(null, "Nice try. Not Quite.");
+					
 					}
 				}
 
@@ -519,6 +541,7 @@ public class ClueGame extends JFrame{
 					
 				}else{
 					controlPanel.showResult(c.getCardName());
+					unSeenCards.remove(c);
 				}
 				}
 				

@@ -44,6 +44,12 @@ public class Solution {
 		}
 		else return false;
 	}
+	
+	public void setSolution(String p, String r, String w){
+		this.person = p;
+		this.room = r;
+		this.weapon = w;
+	}
 
 	public Card getPersonCard() {
 		return personCard;
