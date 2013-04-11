@@ -31,8 +31,8 @@ public class GameSetupTests {
 	public void testHumanPlayer() {
 		int playerNumber=0;
 		assertEquals(testGame.getPlayerNum(playerNumber).getPlayerName(),"Colonel Mustard");
-		assertEquals(testGame.getPlayerNum(playerNumber).getColor(),Color.yellow);
-		assertEquals(testGame.getPlayerNum(playerNumber).getLocation(),32);	
+		assertEquals(testGame.getPlayerNum(playerNumber).getColor(),Color.orange);
+		assertEquals(testGame.getPlayerNum(playerNumber).getLocation(),498);	
 	}
 	
 	@Test
@@ -40,7 +40,7 @@ public class GameSetupTests {
 		int playerNumber=3;
 		assertEquals(testGame.getPlayerNum(playerNumber).getPlayerName(),"Professor Plum");
 		assertEquals(testGame.getPlayerNum(playerNumber).getColor(),Color.magenta);	
-		assertEquals(testGame.getPlayerNum(playerNumber).getLocation(),294);	
+		assertEquals(testGame.getPlayerNum(playerNumber).getLocation(),19);	
 	}
 	
 	@Test
@@ -48,7 +48,7 @@ public class GameSetupTests {
 		int playerNumber=5;
 		assertEquals(testGame.getPlayerNum(playerNumber).getPlayerName(),"Miss Scarlet");
 		assertEquals(testGame.getPlayerNum(playerNumber).getColor(),Color.red);	
-		assertEquals(testGame.getPlayerNum(playerNumber).getLocation(),528);	
+		assertEquals(testGame.getPlayerNum(playerNumber).getLocation(),321);	
 	}
 
 	@Test

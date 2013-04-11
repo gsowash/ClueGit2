@@ -49,6 +49,7 @@ public class ClueGame extends JFrame{
 	private Solution solution = new Solution();
 	private Boolean humanMove = true;
 	public AccusationWindow win;
+	public AccusationWindow suggest;
 
 	
 	public ClueGame() {		// Default constructor for test purposes only. Use 4 argument ctor below
@@ -68,8 +69,10 @@ public class ClueGame extends JFrame{
 		controlPanel = new ControlPanel();
 		controlPanel.nextPlayer.addActionListener(new ButtonListener());
 		controlPanel.accusation.addActionListener(new ButtonListener());
-		win = new AccusationWindow('Z');
+		win = new AccusationWindow();
 		win.submit.addActionListener(new ButtonListener());
+		suggest = new AccusationWindow();
+		suggest.submit.addActionListener(new ButtonListener());
 		board.addMouseListener(new BoardListener());
 		
 
@@ -425,7 +428,7 @@ public class ClueGame extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		ClueGame mainInstance = new ClueGame("ClueLayout.csv","ClueLegend.txt","CluePlayers.txt","ClueCards.txt");
+		ClueGame mainInstance = new ClueGame("ClueLayout.csv","ClueLegend.txt","CluePlayers.txt","ClueCards1.txt");
 		JOptionPane.showMessageDialog(mainInstance, "You are " + mainInstance.players.get(0).getPlayerName() + ", press Next Player to begin play", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
 		mainInstance.setVisible(true);
 		//mainInstance.runGame();
@@ -450,8 +453,10 @@ public class ClueGame extends JFrame{
 
 			}else if(e.getSource() == controlPanel.accusation){
 				if(currPlayer == 1 && !humanMove){
-					
+					win = new AccusationWindow();
+					win.submit.addActionListener(new ButtonListener());
 					//JFrame accuse = new AccusationWindow('Z');
+					win.type('Z');
 					win.setVisible(true);
 					
 					humanMove = true;
@@ -472,27 +477,55 @@ public class ClueGame extends JFrame{
 //						JOptionPane.showMessageDialog(null, "YOU GOTTA BE IN A ROOM FOOL!!");
 //					}
 				}else {
-					JOptionPane.showMessageDialog(null, "IT AIN'T YO TURN!!");
+					JOptionPane.showMessageDialog(null, "It is not your turn, sir/madam!");
 				}
 				
 			}else if(e.getSource() == win.submit){
-				win.dispose();
+				
 				
 				String person = (String)win.peopleCombo.getSelectedItem();
 				String weapon = (String)win.weaponsCombo.getSelectedItem();
 				String room = (String)win.roomCombo.getSelectedItem();
-				
-				Solution test = new Solution(person, room, weapon);
-				
-				if(solution.equals(test) ){
-					JOptionPane.showMessageDialog(null, "THAT'S IT! YOU WON!\n" + person + " in the " + room + " with the ");
+				if(person.equals("Unknown" ) || weapon.equals("Unknown" ) || room.equalsIgnoreCase("Unknown")){
+					JOptionPane.showMessageDialog(null, "That's not a valid choice. Try again.");
 				}else{
-					JOptionPane answer = new JOptionPane();
-//					answer.setSize(60, 60);
-//					answer.set
-					JOptionPane.showMessageDialog(null, "Nice try. it's really\n" + person + " in the " + room + " with the ");
+
+					win.dispose();
+					Solution test = new Solution(person, room, weapon);
+
+					if(solution.equals(test) ){
+						JOptionPane.showMessageDialog(null, "THAT'S IT! YOU WON!\n" + person + " in the " + room + " with the " + weapon);
+					}else{
+						//JOptionPane answer = new JOptionPane();
+						//					answer.setSize(60, 60);
+						//					answer.set
+						JOptionPane.showMessageDialog(null, "Nice try. it's really\n" + solution.getPerson() + " in the " + solution.getRoom() + " with the " + solution.getWeapon());
+					}
 				}
 
+			}else if(e.getSource() == suggest.submit){
+				String person = (String)suggest.peopleCombo.getSelectedItem();
+				String weapon = (String)suggest.weaponsCombo.getSelectedItem();
+				if(person.equals("Unknown" ) || weapon.equals("Unknown" )){
+					JOptionPane.showMessageDialog(null, "That's not a valid choice. Try again.");
+				}else{
+					suggest.dispose();
+				String room = suggest.getRoom();
+				//System.out.println(room);
+				Card c = handleSuggestion(person, room, weapon, currPlayer-1);
+				controlPanel.showSuggestion(person, room, weapon);
+				if (c == null){
+					controlPanel.showResult("Cannot disprove");
+					
+				}else{
+					controlPanel.showResult(c.getCardName());
+				}
+				}
+				
+				
+				
+				
+				
 			}
 
 		}
@@ -535,8 +568,14 @@ class BoardListener implements MouseListener{
 			if(board.isRoom(spot)){
 				//JOptionPane.showMessageDialog(null, "SUGGEST!");
 				
-				AccusationWindow suggest = new AccusationWindow(((RoomCell)board.getCellAt(players.get(currPlayer-1).getLocation())).getInitial());
+				//AccusationWindow suggest = new AccusationWindow(((RoomCell)board.getCellAt(players.get(currPlayer-1).getLocation())).getInitial());
+				//suggest.submit.addActionListener(new ButtonListener());
+				char t = ((RoomCell)board.getCellAt(players.get(currPlayer-1).getLocation())).getInitial();
+				
+				suggest = new AccusationWindow();
 				suggest.submit.addActionListener(new ButtonListener());
+				suggest.type(t);
+				
 				suggest.setVisible(true);
 				
 			}

@@ -17,27 +17,34 @@ public class AccusationWindow extends JFrame{
 	JLabel yourRoom = new JLabel("Your Room:");
 	JLabel person = new JLabel("Person:");
 	JLabel weapon = new JLabel("Weapon:");
-	JLabel room = new JLabel(" ");
+	private JLabel room = new JLabel(" ");
 	public JComboBox roomCombo;
 	public JComboBox peopleCombo;
 	public JComboBox weaponsCombo;
 	Boolean accuse = false;
 	
 	char roomInitial;
-	public AccusationWindow(char r)
+	public AccusationWindow()
 	{	
 		cancel.addActionListener(new ButtonListener());
 		
-		if ( r == 'Z' ){			
+		
+		
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		setSize(300,200);
+	}
+	
+	public void type(char r){
+		if ( r == 'Z' ){	
+			setTitle("Make an Accusation!");
 			needARoom();
 		}else{
+			setTitle("Make an Suggestion!");
 			roomInitial = r;
 			setRoom();
 		}
 		createAccusation();
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Make an Accusation!");
-		setSize(300,200);
 	}
 	
 	private void needARoom(){
@@ -119,6 +126,11 @@ public class AccusationWindow extends JFrame{
 		add(container);
 		
 		//String n =(String) roomCombo.getSelectedItem();
+		
+	}
+	
+	public String getRoom(){
+		return room.getText();
 		
 	}
 	

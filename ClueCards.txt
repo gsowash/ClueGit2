@@ -1,21 +1,21 @@
-Miss Scarlet	Person
-Colonel Mustard	Person
-Mrs. White	Person
-Reverend Green	Person
-Mrs. Peacock	Person
-Professor Plum	Person
-Candlestick	Weapon
-Knife	Weapon
-Lead Pipe	Weapon
-Revolver	Weapon
-Rope	Weapon
-Wrench	Weapon
-Kitchen	Room
-Ballroom	Room
-Conservatory	Room
-Dining Room	Room
-Billiard Room	Room
-Library	Room
-Lounge	Room
-Hall	Room
-Study	Room
+Miss Scarlet	
+Colonel Mustard	
+Mrs. White	
+Reverend Green	
+Mrs. Peacock	
+Professor Plum	
+Candlestick	
+Knife	
+Lead Pipe	
+Revolver	
+Rope	
+Wrench	
+Kitchen	
+Ballroom	
+Conservatory	
+Dining Room	
+Billiard Room	
+Library	
+Lounge	
+Hall	
+Study	

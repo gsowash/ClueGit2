@@ -30,7 +30,7 @@ public class DetectiveNotes extends JFrame{
 	public DetectiveNotes()
 	{	
 		createDetective();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setTitle("Detective Notes");
 		setSize(550,400);
 	}

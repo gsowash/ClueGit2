@@ -17,7 +17,7 @@ public class Player {
 	private ArrayList<Card> myCards;
 	protected ArrayList<Card> seenCards = new ArrayList<Card>();
 	protected ArrayList<Card> deckOfCards = new ArrayList<Card>();
-	protected int totCol;
+	protected int totCol =1;
 	protected int column;
 	protected int row;
 	
