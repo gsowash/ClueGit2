@@ -48,6 +48,8 @@ public class ClueGame extends JFrame{
 	private HashMap<Integer, Player> players = new HashMap<Integer, Player>();
 	private Solution solution = new Solution();
 	private Boolean humanMove = true;
+	public AccusationWindow win;
+
 	
 	public ClueGame() {		// Default constructor for test purposes only. Use 4 argument ctor below
 		board = new Board("ClueLayout.csv", "ClueLegend.txt");
@@ -66,6 +68,8 @@ public class ClueGame extends JFrame{
 		controlPanel = new ControlPanel();
 		controlPanel.nextPlayer.addActionListener(new ButtonListener());
 		controlPanel.accusation.addActionListener(new ButtonListener());
+		win = new AccusationWindow('Z');
+		win.submit.addActionListener(new ButtonListener());
 		board.addMouseListener(new BoardListener());
 		
 
@@ -446,16 +450,49 @@ public class ClueGame extends JFrame{
 
 			}else if(e.getSource() == controlPanel.accusation){
 				if(currPlayer == 1 && !humanMove){
-					int spot = players.get(currPlayer-1).getLocation();
-					if (board.isRoom(spot)){
-						JOptionPane.showMessageDialog(null, "ACCUSING!!");
-					}else{
-						JOptionPane.showMessageDialog(null, "YOU GOTTA BE IN A ROOM FOOL!!");
+					
+					//JFrame accuse = new AccusationWindow('Z');
+					win.setVisible(true);
+					
+					humanMove = true;
+					HashSet<BoardCell> places = board.getTargets();
+					if(humanMove){
+						for (BoardCell c: places){
+							if(c.isWalkway()){
+								c.setColor(Color.YELLOW);
+							}else c.setColor(Color.WHITE);
+						}	
+						repaint();
 					}
+					
+//					int spot = players.get(currPlayer-1).getLocation();
+//					if (board.isRoom(spot)){
+//						JOptionPane.showMessageDialog(null, "ACCUSING!!");
+//					}else{
+//						JOptionPane.showMessageDialog(null, "YOU GOTTA BE IN A ROOM FOOL!!");
+//					}
 				}else {
 					JOptionPane.showMessageDialog(null, "IT AIN'T YO TURN!!");
 				}
 				
+			}else if(e.getSource() == win.submit){
+				win.dispose();
+				
+				String person = (String)win.peopleCombo.getSelectedItem();
+				String weapon = (String)win.weaponsCombo.getSelectedItem();
+				String room = (String)win.roomCombo.getSelectedItem();
+				
+				Solution test = new Solution(person, room, weapon);
+				
+				if(solution.equals(test) ){
+					JOptionPane.showMessageDialog(null, "THAT'S IT! YOU WON!\n" + person + " in the " + room + " with the ");
+				}else{
+					JOptionPane answer = new JOptionPane();
+//					answer.setSize(60, 60);
+//					answer.set
+					JOptionPane.showMessageDialog(null, "Nice try. it's really\n" + person + " in the " + room + " with the ");
+				}
+
 			}
 
 		}
@@ -476,10 +513,7 @@ class BoardListener implements MouseListener{
 						int n= b.getIndex();
 						players.get(currPlayer-1).setLocation(n);
 						clicked = true;
-						humanMove = true;
-						//Also make suggestion window pop up
-						
-						
+						humanMove = true;							
 					}
 						
 					
@@ -501,8 +535,10 @@ class BoardListener implements MouseListener{
 			if(board.isRoom(spot)){
 				//JOptionPane.showMessageDialog(null, "SUGGEST!");
 				
-				JFrame win = new AccusationWindow(((RoomCell)board.getCellAt(players.get(currPlayer-1).getLocation())).getInitial());
-				win.setVisible(true);
+				AccusationWindow suggest = new AccusationWindow(((RoomCell)board.getCellAt(players.get(currPlayer-1).getLocation())).getInitial());
+				suggest.submit.addActionListener(new ButtonListener());
+				suggest.setVisible(true);
+				
 			}
 		}
 
